@@ -16,6 +16,16 @@ Or install it yourself with:
 
     $ gem install flipper-mongo
 
+## Usage
+
+```ruby
+require 'flipper/adapters/mongo'
+collection = Mongo::Connection.new.db('testing')['flipper']
+adapter = Flipper::Adapters::Mongo.new(collection, 'features')
+flipper = Flipper.new(adapter)
+# profit...
+```
+
 ## Contributing
 
 1. Fork it
