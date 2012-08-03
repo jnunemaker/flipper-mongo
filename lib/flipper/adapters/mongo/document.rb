@@ -68,9 +68,9 @@ module Flipper
 
         def load
           @loaded = true
+          @source.clear
           @source.update @collection.find_one(@criteria) || {}
         end
-
       end
     end
   end

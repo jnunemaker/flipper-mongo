@@ -48,6 +48,7 @@ describe Flipper::Adapters::Mongo::Document do
   describe "#read" do
     context "existing key" do
       before do
+        source['baz'] = 'wick'
         collection.update(criteria, {'$set' => {'foo' => 'bar'}}, options)
         @result = subject.read('foo')
       end
@@ -56,7 +57,7 @@ describe Flipper::Adapters::Mongo::Document do
         @result.should eq('bar')
       end
 
-      it "loads source hash" do
+      it "clears and loads source hash" do
         source.should eq({
           '_id' => id,
           'foo' => 'bar',
