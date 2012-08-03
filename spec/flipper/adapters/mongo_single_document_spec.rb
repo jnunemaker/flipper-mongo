@@ -1,20 +1,21 @@
 require 'helper'
-require 'flipper/adapters/mongo'
+require 'flipper/adapters/mongo_single_document'
 require 'flipper/spec/shared_adapter_specs'
 
-describe Flipper::Adapters::Mongo do
+describe Flipper::Adapters::MongoSingleDocument do
   let(:collection) { Mongo::Connection.new.db('testing')['testing'] }
+  let(:criteria)   { {:_id => id} }
   let(:id)         { 'flipper' }
 
-  subject { described_class.new(collection) }
+  subject { described_class.new(collection, :id => id) }
 
   before do
-    collection.remove
+    collection.remove(criteria)
   end
 
   def read_key(key)
-    if (doc = collection.find_one(:_id => key))
-      value = doc['v']
+    if (doc = collection.find_one(criteria))
+      value = doc[key]
 
       if value.is_a?(::Array)
         value = value.to_set
@@ -29,9 +30,8 @@ describe Flipper::Adapters::Mongo do
       value = value.to_a
     end
 
-    criteria = {:_id => key}
-    updates  = {'$set' => {'v' => value}}
-    options  = {:upsert => true}
+    options = {:upsert => true}
+    updates = {'$set' => {key => value}}
     collection.update criteria, updates, options
   end
 

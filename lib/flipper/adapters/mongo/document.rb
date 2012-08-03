@@ -3,7 +3,7 @@ require 'mongo'
 
 module Flipper
   module Adapters
-    class Mongo
+    class MongoSingleDocument
       class Document
         DefaultId = 'flipper'
 

@@ -1,7 +1,7 @@
 require 'helper'
 require 'flipper/adapters/mongo/document'
 
-describe Flipper::Adapters::Mongo::Document do
+describe Flipper::Adapters::MongoSingleDocument::Document do
   subject          { described_class.new(collection, :id => id, :source => source) }
   let(:collection) { Mongo::Connection.new.db('testing')['testing'] }
   let(:id)         { described_class::DefaultId }
