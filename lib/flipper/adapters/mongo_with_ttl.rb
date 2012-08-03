@@ -7,7 +7,7 @@ module Flipper
     class MongoWithTTL < Mongo
       private
 
-      # Override Mongo adapters load
+      # Override Mongo adapter's load
       def load
         if expired?
           @document = fresh_load
