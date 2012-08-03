@@ -5,12 +5,6 @@ require 'flipper/adapters/mongo'
 module Flipper
   module Adapters
     class MongoWithTTL < Mongo
-
-      def initialize(collection, id, options = {})
-        super collection, id
-        @options = options
-      end
-
       private
 
       # Override Mongo adapters load

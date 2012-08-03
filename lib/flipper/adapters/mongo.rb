@@ -4,10 +4,12 @@ require 'mongo'
 module Flipper
   module Adapters
     class Mongo
-      def initialize(collection, id)
+      DefaultId = 'flipper'
+
+      def initialize(collection, options = {})
         @collection = collection
-        @id = id
-        @mongo_criteria = {:_id => @id}
+        @options = options
+        @mongo_criteria = {:_id => id}
         @mongo_options = {:upsert => true, :safe => true}
       end
 
@@ -36,6 +38,10 @@ module Flipper
       end
 
       private
+
+      def id
+        @id ||= @options.fetch(:id) { DefaultId }
+      end
 
       def update(updates)
         @collection.update(@mongo_criteria, updates, @mongo_options)

@@ -4,10 +4,10 @@ require 'flipper/spec/shared_adapter_specs'
 
 describe Flipper::Adapters::Mongo do
   let(:collection) { Mongo::Connection.new.db('testing')['testing'] }
-  let(:oid)        { BSON::ObjectId.new }
-  let(:criteria)   { {:_id => oid} }
+  let(:criteria)   { {:_id => id} }
+  let(:id)         { described_class::DefaultId }
 
-  subject { Flipper::Adapters::Mongo.new(collection, oid) }
+  subject { Flipper::Adapters::Mongo.new(collection) }
 
   before do
     collection.remove(criteria)

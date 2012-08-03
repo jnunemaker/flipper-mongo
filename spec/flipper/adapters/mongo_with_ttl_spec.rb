@@ -4,10 +4,10 @@ require 'flipper/spec/shared_adapter_specs'
 
 describe Flipper::Adapters::MongoWithTTL do
   let(:collection) { Mongo::Connection.new.db('testing')['testing'] }
-  let(:oid)        { BSON::ObjectId.new }
-  let(:criteria)   { {:_id => oid} }
+  let(:criteria)   { {:_id => id} }
+  let(:id)         { described_class::DefaultId }
 
-  subject { Flipper::Adapters::MongoWithTTL.new(collection, oid) }
+  subject { Flipper::Adapters::MongoWithTTL.new(collection) }
 
   before do
     collection.remove(criteria)
@@ -17,12 +17,12 @@ describe Flipper::Adapters::MongoWithTTL do
 
   it "can cache document in process for a number of seconds" do
     options = {:ttl => 10}
-    adapter = Flipper::Adapters::MongoWithTTL.new(collection, oid, options)
+    adapter = Flipper::Adapters::MongoWithTTL.new(collection, options)
     adapter.write('foo', 'bar')
     now = Time.now
     Timecop.freeze(now)
 
-    collection.should_receive(:find_one).with(:_id => oid)
+    collection.should_receive(:find_one).with(:_id => id)
     adapter.read('foo')
 
     adapter.read('foo')
@@ -34,7 +34,7 @@ describe Flipper::Adapters::MongoWithTTL do
     Timecop.travel(6)
     adapter.read('foo')
 
-    collection.should_receive(:find_one).with(:_id => oid)
+    collection.should_receive(:find_one).with(:_id => id)
     Timecop.travel(1)
     adapter.read('foo')
 
