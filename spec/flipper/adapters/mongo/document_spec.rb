@@ -23,25 +23,25 @@ describe Flipper::Adapters::Mongo::Document do
 
   describe "loading document" do
     before do
-      collection.update(criteria, {'$set' => {'foo' => 'bar', 'apple' => 'orange'}}, options)
+      collection.update(criteria, {'$set' => {'foo' => 'bar', 'people' => [1, 2, 3]}}, options)
     end
 
     it "only happens once" do
       collection.should_receive(:find_one).with(criteria).once.and_return({})
       subject.read('foo')
-      subject.read('apple')
+      subject.set_members('people')
     end
 
     it "happens again if document is cleared" do
       collection.should_receive(:find_one).with(criteria)
       subject.read('foo')
-      subject.read('apple')
+      subject.set_members('people')
 
       subject.clear
 
       collection.should_receive(:find_one).with(criteria)
       subject.read('foo')
-      subject.read('apple')
+      subject.set_members('people')
     end
   end
 
