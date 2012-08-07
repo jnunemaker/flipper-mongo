@@ -10,7 +10,7 @@ module Flipper
         def initialize(collection, options = {})
           @collection = collection
           @options = options
-          @id = @options.fetch(:id) { DefaultId }
+          @id = @options[:id] || DefaultId
           @source = @options.fetch(:source) { {} }
           @criteria = {:_id => @id}
           @mongo_options = {:safe => true, :upsert => true}

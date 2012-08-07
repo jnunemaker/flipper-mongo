@@ -21,6 +21,10 @@ describe Flipper::Adapters::MongoSingleDocument::Document do
     described_class.new(collection).instance_variable_get("@id").should eq('flipper')
   end
 
+  it "defaults id to flipper even if nil passed in for id" do
+    described_class.new(collection, :id => nil).instance_variable_get("@id").should eq('flipper')
+  end
+
   describe "loading document" do
     before do
       collection.update(criteria, {'$set' => {'foo' => 'bar', 'people' => [1, 2, 3]}}, options)
