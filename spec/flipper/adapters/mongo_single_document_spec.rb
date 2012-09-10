@@ -15,7 +15,7 @@ describe Flipper::Adapters::MongoSingleDocument do
 
   def read_key(key)
     if (doc = collection.find_one(criteria))
-      value = doc[key]
+      value = doc[key.to_s]
 
       if value.is_a?(::Array)
         value = value.to_set
@@ -31,7 +31,7 @@ describe Flipper::Adapters::MongoSingleDocument do
     end
 
     options = {:upsert => true}
-    updates = {'$set' => {key => value}}
+    updates = {'$set' => {key.to_s => value}}
     collection.update criteria, updates, options
   end
 

@@ -17,37 +17,37 @@ module Flipper
         end
 
         def read(key)
-          source[key]
+          source[key.to_s]
         end
 
         def write(key, value)
-          @collection.update @criteria, {'$set' => {key => value}}, @mongo_options
-          @source[key] = value
+          @collection.update @criteria, {'$set' => {key.to_s => value}}, @mongo_options
+          @source[key.to_s] = value
         end
 
         def delete(key)
-          @collection.update @criteria, {'$unset' => {key => 1}}, @mongo_options
-          @source.delete key
+          @collection.update @criteria, {'$unset' => {key.to_s => 1}}, @mongo_options
+          @source.delete key.to_s
         end
 
         def set_members(key)
-          members = source.fetch(key) { @source[key] = Set.new }
+          members = source.fetch(key.to_s) { @source[key.to_s] = Set.new }
 
           if members.is_a?(Array)
-            @source[key] = members.to_set
+            @source[key.to_s] = members.to_set
           else
             members
           end
         end
 
         def set_add(key, value)
-          @collection.update @criteria, {'$addToSet' => {key => value}}, @mongo_options
-          set_members(key).add(value)
+          @collection.update @criteria, {'$addToSet' => {key.to_s => value}}, @mongo_options
+          set_members(key.to_s).add(value)
         end
 
         def set_delete(key, value)
-          @collection.update @criteria, {'$pull' => {key => value}}, @mongo_options
-          set_members(key).delete(value)
+          @collection.update @criteria, {'$pull' => {key.to_s => value}}, @mongo_options
+          set_members(key.to_s).delete(value)
         end
 
         def clear

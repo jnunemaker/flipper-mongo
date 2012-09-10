@@ -13,7 +13,7 @@ describe Flipper::Adapters::Mongo do
   end
 
   def read_key(key)
-    if (doc = collection.find_one(:_id => key))
+    if (doc = collection.find_one(:_id => key.to_s))
       value = doc['v']
 
       if value.is_a?(::Array)
@@ -29,7 +29,7 @@ describe Flipper::Adapters::Mongo do
       value = value.to_a
     end
 
-    criteria = {:_id => key}
+    criteria = {:_id => key.to_s}
     updates  = {'$set' => {'v' => value}}
     options  = {:upsert => true}
     collection.update criteria, updates, options

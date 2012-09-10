@@ -21,7 +21,7 @@ module Flipper
       end
 
       def delete(key)
-        @collection.remove criteria(key)
+        remove key
       end
 
       def set_members(key)
@@ -39,7 +39,9 @@ module Flipper
       private
 
       def find_one(key)
-        if (doc = @collection.find_one(criteria(key)))
+        doc = @collection.find_one(criteria(key))
+
+        unless doc.nil?
           doc['v']
         end
       end
@@ -48,8 +50,12 @@ module Flipper
         @collection.update criteria(key), updates, @update_options
       end
 
+      def remove(key)
+        @collection.remove criteria(key)
+      end
+
       def criteria(key)
-        {:_id => key}
+        {:_id => key.to_s}
       end
     end
   end
