@@ -27,7 +27,7 @@ describe Flipper::Adapters::MongoSingleDocument::Document do
 
   describe "loading document" do
     before do
-      collection.update(criteria, {'$set' => {'foo' => 'bar', 'people' => [1, 2, 3]}}, options)
+      collection.update(criteria, {'$set' => {'foo' => 'bar', 'people' => ['1', '2', '3']}}, options)
     end
 
     it "only happens once" do
@@ -151,18 +151,18 @@ describe Flipper::Adapters::MongoSingleDocument::Document do
   describe "#set_members" do
     context "existing key" do
       before do
-        collection.update(criteria, {'$set' => {'people' => [1, 2, 3], 'foo' => 'bar'}}, options)
+        collection.update(criteria, {'$set' => {'people' => ['1', '2', '3'], 'foo' => 'bar'}}, options)
         @result = subject.set_members('people')
       end
 
       it "returns set" do
-        @result.should eq(Set[1, 2, 3])
+        @result.should eq(Set['1', '2', '3'])
       end
 
       it "loads source hash" do
         source.should eq({
           '_id'    => id,
-          'people' => Set[1, 2, 3],
+          'people' => Set['1', '2', '3'],
           'foo'    => 'bar',
         })
       end
@@ -170,7 +170,7 @@ describe Flipper::Adapters::MongoSingleDocument::Document do
 
     context "missing key" do
       before do
-        collection.update(criteria, {'$set' => {'people' => [1, 2, 3]}}, options)
+        collection.update(criteria, {'$set' => {'people' => ['1', '2', '3']}}, options)
         @result = subject.set_members('users')
       end
 
@@ -189,31 +189,31 @@ describe Flipper::Adapters::MongoSingleDocument::Document do
   describe "#set_add" do
     context "existing key" do
       before do
-        collection.update(criteria, {'$set' => {'people' => [1, 2, 3]}}, options)
+        collection.update(criteria, {'$set' => {'people' => ['1', '2', '3']}}, options)
         subject.set_add('people', 4)
       end
 
       it "adds value to set" do
-        document.fetch('people').should eq([1, 2, 3, 4])
-        source.fetch('people').should eq(Set[1, 2, 3, 4])
+        document.fetch('people').should eq(['1', '2', '3', '4'])
+        source.fetch('people').should eq(Set['1', '2', '3', '4'])
       end
     end
 
     context "missing key" do
       before do
-        collection.update(criteria, {'$set' => {'people' => [1, 2, 3]}}, options)
-        subject.set_add('users', 1)
+        collection.update(criteria, {'$set' => {'people' => ['1', '2', '3']}}, options)
+        subject.set_add('users', '1')
       end
 
       it "adds value to set" do
-        document.fetch('users').should eq([1])
-        source.fetch('users').should eq(Set[1])
+        document.fetch('users').should eq(['1'])
+        source.fetch('users').should eq(Set['1'])
       end
     end
 
     context "missing document" do
       before do
-        subject.set_add('people', 1)
+        subject.set_add('people', '1')
       end
 
       it "creates document" do
@@ -221,8 +221,8 @@ describe Flipper::Adapters::MongoSingleDocument::Document do
       end
 
       it "adds value to set" do
-        document.fetch('people').should eq([1])
-        source.fetch('people').should eq(Set[1])
+        document.fetch('people').should eq(['1'])
+        source.fetch('people').should eq(Set['1'])
       end
     end
   end
@@ -230,23 +230,23 @@ describe Flipper::Adapters::MongoSingleDocument::Document do
   describe "#set_delete" do
     context "existing key" do
       before do
-        collection.update(criteria, {'$set' => {'people' => [1, 2, 3]}}, options)
-        subject.set_delete 'people', 3
+        collection.update(criteria, {'$set' => {'people' => ['1', '2', '3']}}, options)
+        subject.set_delete 'people', '3'
       end
 
       it "removes value to key" do
-        document.fetch('people').should eq([1, 2])
-        source.fetch('people').should eq(Set[1, 2])
+        document.fetch('people').should eq(['1', '2'])
+        source.fetch('people').should eq(Set['1', '2'])
       end
     end
 
     context "missing key" do
       before do
-        collection.update(criteria, {'$set' => {'people' => [1, 2, 3]}}, options)
+        collection.update(criteria, {'$set' => {'people' => ['1', '2', '3']}}, options)
       end
 
       it "does not error" do
-        expect { subject.set_delete 'foo', 1 }.to_not raise_error
+        expect { subject.set_delete 'foo', '1' }.to_not raise_error
       end
     end
 

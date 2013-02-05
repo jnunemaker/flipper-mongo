@@ -21,6 +21,7 @@ module Flipper
         end
 
         def write(key, value)
+          value = value.to_s
           @collection.update @criteria, {'$set' => {key.to_s => value}}, @mongo_options
           @source[key.to_s] = value
         end
@@ -41,11 +42,13 @@ module Flipper
         end
 
         def set_add(key, value)
+          value = value.to_s
           @collection.update @criteria, {'$addToSet' => {key.to_s => value}}, @mongo_options
           set_members(key.to_s).add(value)
         end
 
         def set_delete(key, value)
+          value = value.to_s
           @collection.update @criteria, {'$pull' => {key.to_s => value}}, @mongo_options
           set_members(key.to_s).delete(value)
         end

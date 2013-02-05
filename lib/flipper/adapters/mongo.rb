@@ -17,7 +17,7 @@ module Flipper
       end
 
       def write(key, value)
-        update key, {'$set' => {'v' => value}}
+        update key, {'$set' => {'v' => value.to_s}}
       end
 
       def delete(key)
@@ -29,11 +29,11 @@ module Flipper
       end
 
       def set_add(key, value)
-        update key, {'$addToSet' => {'v' => value}}
+        update key, {'$addToSet' => {'v' => value.to_s}}
       end
 
       def set_delete(key, value)
-        update key, {'$pull' => {'v' => value}}
+        update key, {'$pull' => {'v' => value.to_s}}
       end
 
       private

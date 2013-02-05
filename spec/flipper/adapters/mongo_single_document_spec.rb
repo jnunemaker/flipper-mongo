@@ -26,8 +26,10 @@ describe Flipper::Adapters::MongoSingleDocument do
   end
 
   def write_key(key, value)
-    if value.is_a?(::Set)
-      value = value.to_a
+    value = if value.is_a?(::Set)
+      value.to_a.map(&:to_s)
+    else
+      value.to_s
     end
 
     options = {:upsert => true}
