@@ -6,3 +6,5 @@ rvm:
 notifications:
   email: false
 bundler_args: --without guard
+before_script: sudo service mongodb status
+services: mongodb
