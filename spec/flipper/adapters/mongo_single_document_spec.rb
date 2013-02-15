@@ -13,30 +13,6 @@ describe Flipper::Adapters::MongoSingleDocument do
     collection.remove(criteria)
   end
 
-  def read_key(key)
-    if (doc = collection.find_one(criteria))
-      value = doc[key.to_s]
-
-      if value.is_a?(::Array)
-        value = value.to_set
-      end
-
-      value
-    end
-  end
-
-  def write_key(key, value)
-    value = if value.is_a?(::Set)
-      value.to_a.map(&:to_s)
-    else
-      value.to_s
-    end
-
-    options = {:upsert => true}
-    updates = {'$set' => {key.to_s => value}}
-    collection.update criteria, updates, options
-  end
-
   context "with cache" do
     before do
       subject.document_cache = true
