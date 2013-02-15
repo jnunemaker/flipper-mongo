@@ -20,7 +20,7 @@ module Flipper
         doc = find(feature.key)
 
         feature.gates.each do |gate|
-          result[gate] = case gate.data_type
+          result[gate.key] = case gate.data_type
           when :boolean, :integer
             doc[gate.key.to_s]
           when :set
