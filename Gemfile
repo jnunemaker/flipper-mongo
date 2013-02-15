@@ -5,7 +5,6 @@ gem 'rake'
 gem 'rspec'
 gem 'timecop'
 gem 'bson_ext'
-gem 'mongo'
 gem 'rack-test'
 
 group(:guard) do

@@ -15,4 +15,5 @@ Gem::Specification.new do |gem|
   gem.require_paths = ["lib"]
   gem.version       = Flipper::Adapters::Mongo::VERSION
   gem.add_dependency 'flipper', '~> 0.4'
+  gem.add_dependency 'mongo', '~> 1.8.0'
 end
