@@ -12,19 +12,19 @@ module Flipper
       def initialize(collection)
         @collection = collection
         @name = :mongo
-        @update_options = {:safe => true, :upsert => true}
       end
 
       # Public
       def get(feature)
         result = {}
+        doc = find(feature.key)
 
         feature.gates.each do |gate|
           result[gate] = case gate.data_type
           when :boolean, :integer
-            read key(feature, gate)
+            doc[gate.key.to_s]
           when :set
-            set_members key(feature, gate)
+            doc.fetch(gate.key.to_s) { Set.new }.to_set
           else
             unsupported_data_type(gate.data_type)
           end
@@ -37,9 +37,13 @@ module Flipper
       def enable(feature, gate, thing)
         case gate.data_type
         when :boolean, :integer
-          write key(feature, gate), thing.value.to_s
+          update feature.key, '$set' => {
+            gate.key.to_s => thing.value.to_s,
+          }
         when :set
-          set_add key(feature, gate), thing.value.to_s
+          update feature.key, '$addToSet' => {
+            gate.key.to_s => thing.value.to_s,
+          }
         else
           unsupported_data_type(gate.data_type)
         end
@@ -51,13 +55,11 @@ module Flipper
       def disable(feature, gate, thing)
         case gate.data_type
         when :boolean
-          feature.gates.each do |gate|
-            delete key(feature, gate)
-          end
+          remove feature.key
         when :integer
-          write key(feature, gate), thing.value.to_s
+          update feature.key, '$set' => {gate.key.to_s => thing.value.to_s}
         when :set
-          set_delete key(feature, gate), thing.value.to_s
+          update feature.key, '$pull' => {gate.key.to_s => thing.value.to_s}
         else
           unsupported_data_type(gate.data_type)
         end
@@ -67,18 +69,13 @@ module Flipper
 
       # Public: Adds a feature to the set of known features.
       def add(feature)
-        set_add(FeaturesKey, feature.name.to_s)
+        update FeaturesKey, '$addToSet' => {'features' => feature.name.to_s}
         true
       end
 
       # Public: The set of known features.
       def features
-        set_members(FeaturesKey)
-      end
-
-      # Private
-      def key(feature, gate)
-        "#{feature.key}/#{gate.key}"
+        find(FeaturesKey).fetch('features') { Set.new }.to_set
       end
 
       # Private
@@ -86,48 +83,23 @@ module Flipper
         raise "#{data_type} is not supported by this adapter"
       end
 
-      def read(key)
-        find_one key
+      # Private
+      def find(key)
+        @collection.find_one(criteria(key)) || {}
       end
 
-      def write(key, value)
-        update key, {'$set' => {'v' => value.to_s}}
-      end
-
-      def delete(key)
-        remove key
-      end
-
-      def set_members(key)
-        (find_one(key) || Set.new).to_set
-      end
-
-      def set_add(key, value)
-        update key, {'$addToSet' => {'v' => value.to_s}}
-      end
-
-      def set_delete(key, value)
-        update key, {'$pull' => {'v' => value.to_s}}
-      end
-
-      private
-
-      def find_one(key)
-        doc = @collection.find_one(criteria(key))
-
-        unless doc.nil?
-          doc['v']
-        end
-      end
-
+      # Private
       def update(key, updates)
-        @collection.update criteria(key), updates, @update_options
+        options = {:upsert => true}
+        @collection.update criteria(key), updates, options
       end
 
+      # Private
       def remove(key)
         @collection.remove criteria(key)
       end
 
+      # Private
       def criteria(key)
         {:_id => key.to_s}
       end
