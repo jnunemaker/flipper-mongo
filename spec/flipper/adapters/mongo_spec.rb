@@ -3,8 +3,7 @@ require 'flipper/adapters/mongo'
 require 'flipper/spec/shared_adapter_specs'
 
 describe Flipper::Adapters::Mongo do
-  let(:collection) { Mongo::Connection.new.db('testing')['testing'] }
-  let(:id)         { 'flipper' }
+  let(:collection) { Mongo::MongoClient.new.db('testing')['testing'] }
 
   subject { described_class.new(collection) }
 

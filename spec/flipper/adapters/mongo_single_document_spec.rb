@@ -3,7 +3,7 @@ require 'flipper/adapters/mongo_single_document'
 require 'flipper/spec/shared_adapter_specs'
 
 describe Flipper::Adapters::MongoSingleDocument do
-  let(:collection) { Mongo::Connection.new.db('testing')['testing'] }
+  let(:collection) { Mongo::MongoClient.new.db('testing')['testing'] }
   let(:criteria)   { {:_id => id} }
   let(:id)         { 'flipper' }
 

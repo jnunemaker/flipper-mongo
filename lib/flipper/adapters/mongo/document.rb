@@ -13,7 +13,7 @@ module Flipper
           @id = @options[:id] || DefaultId
           @source = @options.fetch(:source) { {} }
           @criteria = {:_id => @id}
-          @mongo_options = {:safe => true, :upsert => true}
+          @mongo_options = {:upsert => true}
         end
 
         def read(key)

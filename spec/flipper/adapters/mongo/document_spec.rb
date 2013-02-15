@@ -7,7 +7,7 @@ describe Flipper::Adapters::MongoSingleDocument::Document do
   let(:id)         { described_class::DefaultId }
   let(:source)     { {} }
   let(:criteria)   { {:_id => id} }
-  let(:options)    { {:safe => true, :upsert => true} }
+  let(:options)    { {:upsert => true} }
 
   def document
     collection.find_one(criteria)
