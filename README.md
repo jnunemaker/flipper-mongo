@@ -28,7 +28,7 @@ flipper = Flipper.new(adapter)
 
 ## Internals
 
-Each feature is stored in a document. Getting a feature is therefore one mongo call.
+Each feature is stored in a document, which means getting a feature is single query.
 
 ```ruby
 require 'flipper/adapters/mongo'
