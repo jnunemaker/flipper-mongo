@@ -26,7 +26,6 @@ Or install it yourself with:
 
     $ gem install flipper-mongo
 
-
 ## Contributing
 
 1. Fork it
