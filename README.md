@@ -2,6 +2,20 @@
 
 A [MongoDB](https://github.com/mongodb/mongo-ruby-driver) adapter for [Flipper](https://github.com/jnunemaker/flipper).
 
+## Installation
+
+Add this line to your application's Gemfile:
+
+    gem 'flipper-mongo'
+
+And then execute:
+
+    $ bundle
+
+Or install it yourself with:
+
+    $ gem install flipper-mongo
+
 ## Usage
 
 ```ruby
@@ -61,20 +75,6 @@ pp adapter.get(flipper[:stats])
 #  :percentage_of_actors=>"45",
 #  :percentage_of_random=>"15"}
 ```
-
-## Installation
-
-Add this line to your application's Gemfile:
-
-    gem 'flipper-mongo'
-
-And then execute:
-
-    $ bundle
-
-Or install it yourself with:
-
-    $ gem install flipper-mongo
 
 ## Contributing
 
