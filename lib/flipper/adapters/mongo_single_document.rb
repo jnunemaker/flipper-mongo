@@ -6,10 +6,13 @@ require 'flipper/adapters/mongo/document'
 module Flipper
   module Adapters
     class MongoSingleDocument
+      include Flipper::Adapter
       extend Forwardable
 
+      # Private: The key that stores the set of known features.
       FeaturesKey = :flipper_features
 
+      # Public: The name of the adapter.
       attr_reader :name
 
       def initialize(collection, options = {})

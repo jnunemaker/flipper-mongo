@@ -1,6 +1,16 @@
 # Flipper Mongo
 
-A mongo adapter for [Flipper](https://github.com/jnunemaker/flipper), the feature flipping gems.
+A [MongoDB](https://github.com/mongodb/mongo-ruby-driver) adapter for [Flipper](https://github.com/jnunemaker/flipper).
+
+## Usage
+
+```ruby
+require 'flipper/adapters/mongo'
+collection = Mongo::MongoClient.new.db('testing')['flipper']
+adapter = Flipper::Adapters::Mongo.new(collection)
+flipper = Flipper.new(adapter)
+# profit...
+```
 
 ## Installation
 
@@ -16,15 +26,6 @@ Or install it yourself with:
 
     $ gem install flipper-mongo
 
-## Usage
-
-```ruby
-require 'flipper/adapters/mongo'
-collection = Mongo::Connection.new.db('testing')['flipper']
-adapter = Flipper::Adapters::Mongo.new(collection, 'features')
-flipper = Flipper.new(adapter)
-# profit...
-```
 
 ## Contributing
 

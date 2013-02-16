@@ -5,8 +5,12 @@ require 'mongo'
 module Flipper
   module Adapters
     class Mongo
+      include Flipper::Adapter
+
+      # Private: The key that stores the set of known features.
       FeaturesKey = :flipper_features
 
+      # Public: The name of the adapter.
       attr_reader :name
 
       def initialize(collection)
