@@ -1,22 +1,11 @@
-# Flipper Mongo
+require 'pp'
+require 'pathname'
+require 'logger'
 
-A [MongoDB](https://github.com/mongodb/mongo-ruby-driver) adapter for [Flipper](https://github.com/jnunemaker/flipper).
+root_path = Pathname(__FILE__).dirname.join('..').expand_path
+lib_path  = root_path.join('lib')
+$:.unshift(lib_path)
 
-## Usage
-
-```ruby
-require 'flipper/adapters/mongo'
-collection = Mongo::MongoClient.new.db('testing')['flipper']
-adapter = Flipper::Adapters::Mongo.new(collection)
-flipper = Flipper.new(adapter)
-# profit...
-```
-
-## Internals
-
-Each feature is stored in a document. Getting a feature is therefore one mongo call.
-
-```ruby
 require 'flipper/adapters/mongo'
 collection = Mongo::MongoClient.new.db('testing')['flipper']
 adapter = Flipper::Adapters::Mongo.new(collection)
@@ -51,26 +40,4 @@ pp collection.find.to_a
 #   "percentage_of_random"=>"15"},
 #  {"_id"=>"flipper_features", "features"=>["stats", "search"]},
 #  {"_id"=>"search", "boolean"=>"true"}]
-```
-
-## Installation
-
-Add this line to your application's Gemfile:
-
-    gem 'flipper-mongo'
-
-And then execute:
-
-    $ bundle
-
-Or install it yourself with:
-
-    $ gem install flipper-mongo
-
-## Contributing
-
-1. Fork it
-2. Create your feature branch (`git checkout -b my-new-feature`)
-3. Commit your changes (`git commit -am 'Added some feature'`)
-4. Push to the branch (`git push origin my-new-feature`)
-5. Create new Pull Request
+puts
