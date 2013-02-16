@@ -40,7 +40,7 @@ flipper[:stats].enable flipper.actors(45)
 
 flipper[:search].enable
 
-puts '# all docs in collection'
+puts 'all docs in collection'
 pp collection.find.to_a
 # all docs in collection
 # [{"_id"=>"stats",
@@ -51,6 +51,15 @@ pp collection.find.to_a
 #   "percentage_of_random"=>"15"},
 #  {"_id"=>"flipper_features", "features"=>["stats", "search"]},
 #  {"_id"=>"search", "boolean"=>"true"}]
+
+puts 'flipper get of feature'
+pp adapter.get(flipper[:stats])
+# flipper get of feature
+# {:boolean=>"true",
+#  :groups=>#<Set: {"admins", "early_access"}>,
+#  :actors=>#<Set: {"25", "90", "180"}>,
+#  :percentage_of_actors=>"45",
+#  :percentage_of_random=>"15"}
 ```
 
 ## Installation
