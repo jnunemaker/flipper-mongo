@@ -1,5 +1,4 @@
 require 'set'
-require 'forwardable'
 require 'mongo'
 
 module Flipper
