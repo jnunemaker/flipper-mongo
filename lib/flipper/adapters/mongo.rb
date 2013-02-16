@@ -18,7 +18,9 @@ module Flipper
         @name = :mongo
       end
 
-      # Public
+      # Public: Gets the values for all gates for a given feature.
+      #
+      # Returns a Hash of Flipper::Gate#key => value.
       def get(feature)
         result = {}
         doc = find(feature.key)
@@ -37,7 +39,13 @@ module Flipper
         result
       end
 
-      # Public
+      # Public: Enables a gate for a given thing.
+      #
+      # feature - The Flipper::Feature for the gate.
+      # gate - The Flipper::Gate to disable.
+      # thing - The Flipper::Type being disabled for the gate.
+      #
+      # Returns true.
       def enable(feature, gate, thing)
         case gate.data_type
         when :boolean, :integer
@@ -55,7 +63,13 @@ module Flipper
         true
       end
 
-      # Public
+      # Public: Disables a gate for a given thing.
+      #
+      # feature - The Flipper::Feature for the gate.
+      # gate - The Flipper::Gate to disable.
+      # thing - The Flipper::Type being disabled for the gate.
+      #
+      # Returns true.
       def disable(feature, gate, thing)
         case gate.data_type
         when :boolean
