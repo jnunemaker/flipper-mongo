@@ -32,7 +32,7 @@ module Flipper
           when :set
             doc.fetch(gate.key.to_s) { Set.new }.to_set
           else
-            unsupported_data_type(gate.data_type)
+            unsupported_data_type gate.data_type
           end
         end
 
@@ -57,7 +57,7 @@ module Flipper
             gate.key.to_s => thing.value.to_s,
           }
         else
-          unsupported_data_type(gate.data_type)
+          unsupported_data_type gate.data_type
         end
 
         true
@@ -79,7 +79,7 @@ module Flipper
         when :set
           update feature.key, '$pull' => {gate.key.to_s => thing.value.to_s}
         else
-          unsupported_data_type(gate.data_type)
+          unsupported_data_type gate.data_type
         end
 
         true
