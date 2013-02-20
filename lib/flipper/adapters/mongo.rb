@@ -18,6 +18,29 @@ module Flipper
         @name = :mongo
       end
 
+      # Public: The set of known features.
+      def features
+        find(FeaturesKey).fetch('features') { Set.new }.to_set
+      end
+
+      # Public: Adds a feature to the set of known features.
+      def add(feature)
+        update FeaturesKey, '$addToSet' => {'features' => feature.name.to_s}
+        true
+      end
+
+      # Public: Removes a feature from the set of known features.
+      def remove(feature)
+        update FeaturesKey, '$pull' => {'features' => feature.name.to_s}
+        clear feature
+        true
+      end
+
+      # Public: Clears all the gate values for a feature.
+      def clear(feature)
+        delete feature.key
+      end
+
       # Public: Gets the values for all gates for a given feature.
       #
       # Returns a Hash of Flipper::Gate#key => value.
@@ -73,7 +96,7 @@ module Flipper
       def disable(feature, gate, thing)
         case gate.data_type
         when :boolean
-          remove feature.key
+          delete feature.key
         when :integer
           update feature.key, '$set' => {gate.key.to_s => thing.value.to_s}
         when :set
@@ -83,17 +106,6 @@ module Flipper
         end
 
         true
-      end
-
-      # Public: Adds a feature to the set of known features.
-      def add(feature)
-        update FeaturesKey, '$addToSet' => {'features' => feature.name.to_s}
-        true
-      end
-
-      # Public: The set of known features.
-      def features
-        find(FeaturesKey).fetch('features') { Set.new }.to_set
       end
 
       # Private
@@ -113,7 +125,7 @@ module Flipper
       end
 
       # Private
-      def remove(key)
+      def delete(key)
         @collection.remove criteria(key)
       end
 
